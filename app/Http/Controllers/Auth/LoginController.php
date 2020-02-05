@@ -37,4 +37,24 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function username()
+    {
+        $login = request()->input('identity');
+
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'nip';
+        request()->merge([$field => $login]);
+        
+        return $field;
+    }
+    
+    protected function validateLogin()
+    {
+        request()->validate([
+            'identity'  => 'required|string',
+            'password'  => 'required|string',
+            'email'     => 'string|exists:admins',
+            'nip'       => 'string|exists:admins'
+        ]);
+    }
 }
