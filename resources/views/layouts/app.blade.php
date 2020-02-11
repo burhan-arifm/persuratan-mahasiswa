@@ -12,7 +12,7 @@
     <title>@yield('page-title') | {{ config('app.name', 'Laravel') }}</title>
     
     <!--Favicon-->
-    <link rel="icon" type="image/png" href="favicon.ico"> 
+    <link rel="icon" type="image/png" href="{{ asset('storage/favicon.ico') }}"> 
     
     <!--CSS Files Dependencies-->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -20,19 +20,10 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.8/dist/css/select2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@8.15.3/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tempusdominus-bootstrap-4@5.1.2/build/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/eonasdan-bootstrap-datetimepicker@4.17.47/build/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
-
-    <!--Javascript Dependencies-->
-    <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.0.8/dist/js/select2.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@8.15.3/dist/sweetalert2.all.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment-with-locales.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/tempusdominus-bootstrap-4@5.1.2/build/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
@@ -41,7 +32,7 @@
     
 </head>
 <body>
-    <div id="app">
+    <div>
         @guest
         @else
         <!--Navigation bar-->
@@ -61,7 +52,19 @@
         @endguest
 
         <!--Body Content-->
+        @routes
         @yield('content')
     </div>
+
+    <!--Javascript Dependencies-->
+    <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.0.8/dist/js/select2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@8.15.3/dist/sweetalert2.all.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/eonasdan-bootstrap-datetimepicker@4.17.47/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/howler@2.1.3/dist/howler.min.js"></script>
+    <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
 </body>
 </html>

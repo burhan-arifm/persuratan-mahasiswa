@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const path = require('path');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,9 +12,21 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.webpackConfig({
+   resolve: {
+      alias: {
+         ziggy: path.resolve('vendor/tightenco/ziggy/dist/js/route.js')
+      }
+   }
+})
+
 mix.js('resources/js/app.js', 'public/js')
    .scripts([
-      'resources/js/logout-trigger.js'
+      'resources/js/datetimepicker.js',
+      'resources/js/form-masking.js',
+      'resources/js/icon-toggle.js',
+      'resources/js/logout-trigger.js',
+      'resources/js/select.js'
    ], 'public/js/custom.js')
    .sass('resources/sass/app.scss', 'public/css')
    .styles([

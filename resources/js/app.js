@@ -1,5 +1,5 @@
-// import route from "ziggy";
-// import { Ziggy } from "./ziggy";
+import route from "ziggy";
+import { Ziggy } from "./ziggy";
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -11,11 +11,11 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-// Vue.mixin({
-//     methods: {
-//         route: (name, params, absolute) => route(name, params, absolute, Ziggy),
-//     }
-// });
+Vue.mixin({
+    methods: {
+        route: (name, params, absolute) => route(name, params, absolute, Ziggy),
+    }
+});
 
 /**
  * The following block of code may be used to automatically register your
@@ -28,7 +28,7 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-// Vue.component('surat', require('./components/Surat.vue').default);
+Vue.component('surat', require('./components/Surat.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -18,10 +18,9 @@
                 <td>{{ surat.jenis_surat }}</td>
                 <td>{{ surat.waktu_readable }}</td>
                 <td>
-                    <a id="cetak" :href="route('surat.cetak', {id: surat.id})" class="btn btn-sm btn-primary"><em class="fas fa-print"></em></a>
-                    <a id="sunting" :href="route('surat.sunting', {id: surat.id})" class="btn btn-sm btn-primary"><em class="fas fa-edit"></em></a>
-                    <!-- <em id="sunting" :href="'/surat/'+surat.id+'/sunting'" class="btn btn-sm btn-primary"><em class="fas fa-edit"></em></a> -->
-                    <a id="hapus" @click="hapusSurat(surat.id, csrf_token)" class="btn btn-sm btn-danger" title="Hapus Surat"><em class="fas fa-trash"> </em></a>
+                    <a id="cetak" title="Cetak Surat" :href="route('surat.cetak', {id: surat.id})" class="btn btn-sm btn-primary"><em class="fas fa-print"></em></a>
+                    <a id="sunting" title="Sunting Surat" :href="route('surat.sunting', {id: surat.id})" class="btn btn-sm btn-primary"><em class="fas fa-edit"></em></a>
+                    <a id="hapus" title="Hapus Surat" href="#" @click="hapusSurat(surat.id, csrf_token)" class="btn btn-sm btn-danger"><em class="fas fa-trash"> </em></a>
                 </td>
             </tr>
         </tbody>
@@ -32,6 +31,8 @@
 </template>
 
 <script>
+require('howler');
+
 export default {
     props: ['current', 'type'],
     data() {
@@ -41,18 +42,19 @@ export default {
         }
     },
     created() {
-        this.fetchSuratMasuk();
+        this.fetchSurat();
         this.listenForChanges();
     },
     methods: {
-        fetchSuratMasuk() {
-            axios.get('/surat/'+this.type).then((response) => {
+        fetchSurat() {
+            axios.get(this.route('data_surat.'+this.type)).then((response) => {
                 this.letters = response.data
             })
         },
         listenForChanges() {
             Echo.channel('surat-baru').listen('SuratDiajukan', (e) => {
                 this.letters.push(e.surat)
+                playSound()
             })
             Echo.channel('surat-baru').listen('SuratDiproses', (e) => {
                 var surat = this.letters.find((surat) => surat.id === e.surat.id);
@@ -67,6 +69,13 @@ export default {
                 }
             })
         },
+        playSound() {
+            var sound = new Howl({
+                src: 'storage/bell.mp3',
+                volume: 1
+            })
+            sound.play()
+        },
         hapusSurat(id_surat, token) {
             Swal.fire({
                 title: 'Apakah Anda yakin?',
@@ -78,9 +87,8 @@ export default {
                 cancelButtonText: 'Urungkan',
             }).then((result) => {
                 if (result.value) {
-                    var route = "/surat/" + id_surat;
                     $.ajax({
-                        url: route,
+                        url: this.route('surat.hapus', {id: id_surat}),
                         type: 'POST',
                         data: {_method: 'delete', _token: token},
                         success: function () {
@@ -102,33 +110,3 @@ export default {
     }
 }
 </script>
-
-<style>
-.header-fixed {
-    width: 100%;
-}
-.header-fixed > thead,
-.header-fixed > tbody,
-.header-fixed > thead > tr,
-.header-fixed > tbody > tr,
-.header-fixed > thead > tr > th,
-.header-fixed > tbody > tr > td {
-    display: block;
-}
-.header-fixed > thead > tr:after,
-.header-fixed > tbody > tr:after {
-    content: '';
-    display: block;
-    visibility: hidden;
-    clear: both;
-}
-.header-fixed > tbody {
-    overflow-y: auto;
-    height: 150em;
-}
-/* .header-fixed > thead > tr > th,
-.header-fixed > tbody > tr > td {
-    width: 20%;
-    float: left;
-} */
-</style>
