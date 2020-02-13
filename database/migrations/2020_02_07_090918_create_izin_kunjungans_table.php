@@ -17,6 +17,7 @@ class CreateIzinKunjungansTable extends Migration
             $table->bigIncrements('id');
             $table->string('instansi_penerima');
             $table->text('alamat_instansi');
+            $table->string('kota_instansi');
             $table->string('mata_kuliah');
             $table->char('program_studi', 3);
             $table->string('semester', 4);

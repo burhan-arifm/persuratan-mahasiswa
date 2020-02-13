@@ -10,7 +10,8 @@
                 <p>
                     Kepada Yth.<br>
                     <b>{{ $surat->izin_kunjungan->instansi_penerima }}</b><br>
-                    {{ $surat->izin_kunjungan->alamat_instansi }}
+                    {{ $surat->izin_kunjungan->alamat_instansi }}<br>
+                    {{ $surat->izin_kunjungan->kota_instansi }}
                 </p>
             </div>
             <!-- end of Penerima Surat -->

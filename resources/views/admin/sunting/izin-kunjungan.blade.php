@@ -12,12 +12,18 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <label class="col-md-3 control-label" for="alamat_instansi">Lokasi Kunjungan</label>
-        <div class="col-md-6">
-            <textarea class="form-control" id="alamat_instansi" name="alamat_instansi" placeholder="Alamat Instansi Ex:Jl.A.H Nasution No.05, Kota Bandung" rows="5">{{ $surat->izin_kunjungan->alamat_instansi }}</textarea>
+<div class="form-group">
+    <label class="col-md-3 control-label" for="alamat_instansi">Alamat Kunjungan</label>
+    <div class="col-md-6">
+        <textarea class="form-control" id="alamat_instansi" name="alamat_instansi" placeholder="Alamat Instansi Ex:Jl.A.H Nasution No.05" rows="3">{{ $surat->izin_kunjungan->instansi_penerima }}</textarea>
+        <div class="form-group" style="margin-bottom: 0; margin-top: 15px;">
+            <label class="col-md-4 control-label" for="kota_instansi">Kota/Kabupaten</label>
+            <div class="col-md-8">
+                <input id="kota_instansi" name="kota_instansi" type="text" placeholder="Kota tempat instansi berada" class="form-control" value="{{ $surat->izin_kunjungan->kota_instansi }}">
+            </div>
         </div>
     </div>
+</div>
 
     <div class="form-group">
         <label class="col-md-3 control-label" for="mata_kuliah">Mata Kuliah</label>

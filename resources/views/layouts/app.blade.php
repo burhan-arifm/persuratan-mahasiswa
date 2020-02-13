@@ -32,7 +32,7 @@
     
 </head>
 <body>
-    <div>
+    <div class="container align-tems-center">
         @guest
         @else
         <!--Navigation bar-->
@@ -52,7 +52,6 @@
         @endguest
 
         <!--Body Content-->
-        @routes
         @yield('content')
     </div>
 
@@ -66,5 +65,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/eonasdan-bootstrap-datetimepicker@4.17.47/build/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/howler@2.1.3/dist/howler.min.js"></script>
     <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
+    @routes
 </body>
 </html>

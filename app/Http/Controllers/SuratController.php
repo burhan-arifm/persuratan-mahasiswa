@@ -24,14 +24,15 @@ class SuratController extends Controller
         if ($request->tipe_surat == "izin-kunjungan") {
             $detail = \App\IzinKunjungan::create([
                 'instansi_penerima' => $request->instansi_penerima,
-                'alamat_instansi' => $request->alamat_instansi,
-                'mata_kuliah' => $request->mata_kuliah,
-                'program_studi' => $request->program_studi,
-                'semester' => $request->semester,
-                'kelas' => $request->kelas,
-                'dosen_pengampu' => $request->dosen_pengampu,
+                'alamat_instansi'   => $request->alamat_instansi,
+                'kota_instansi'     => $request->kota_instansi,
+                'mata_kuliah'       => $request->mata_kuliah,
+                'program_studi'     => $request->program_studi,
+                'semester'          => $request->semester,
+                'kelas'             => $request->kelas,
+                'dosen_pengampu'    => $request->dosen_pengampu,
                 'tanggal_kunjungan' => \Carbon\Carbon::parseFromLocale($request->tanggal_kunjungan, config('app.locale'))->format("Y-m-d"),
-                'waktu_kunjungan' => $request->waktu_kunjungan
+                'waktu_kunjungan'   => $request->waktu_kunjungan
             ]);
             $pemohon = "$request->program_studi $request->semester-$request->kelas";
         } else {
@@ -129,7 +130,7 @@ class SuratController extends Controller
         ]);
         event(new \App\Events\SuratDiajukan($surat));
 
-        return view('welcome');
+        return view('surat.form.tersimpan');
     }
 
     public function semua()
@@ -258,14 +259,15 @@ class SuratController extends Controller
         if ($request->tipe_surat == "izin-kunjungan") {
             $detail = \App\IzinKunjungan::whereId($surat->surat)->update([
                 'instansi_penerima' => $request->instansi_penerima,
-                'alamat_instansi' => $request->alamat_instansi,
-                'mata_kuliah' => $request->mata_kuliah,
-                'program_studi' => $request->program_studi,
-                'semester' => $request->semester,
-                'kelas' => $request->kelas,
-                'dosen_pengampu' => $request->dosen_pengampu,
+                'alamat_instansi'   => $request->alamat_instansi,
+                'kota_instansi'     => $request->kota_instansi,
+                'mata_kuliah'       => $request->mata_kuliah,
+                'program_studi'     => $request->program_studi,
+                'semester'          => $request->semester,
+                'kelas'             => $request->kelas,
+                'dosen_pengampu'    => $request->dosen_pengampu,
                 'tanggal_kunjungan' => \Carbon\Carbon::parseFromLocale($request->tanggal_kunjungan, config('app.locale'))->format("Y-m-d"),
-                'waktu_kunjungan' => $request->waktu_kunjungan
+                'waktu_kunjungan'   => $request->waktu_kunjungan
             ]);
             $pemohon = "$request->program_studi $request->semester-$request->kelas";
         } else {
