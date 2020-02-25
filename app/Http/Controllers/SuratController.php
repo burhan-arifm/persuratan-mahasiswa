@@ -13,6 +13,7 @@ class SuratController extends Controller
         try {
             return view("surat.form.$kode_surat", ['program_studi' => \App\ProgramStudi::all()]);
         } catch (\Throwable $th) {
+            // $this->console_log($th);
             abort(404);
         }
     }
@@ -40,9 +41,10 @@ class SuratController extends Controller
                 ['nim' => $request->nim],
                 ['nama' => $request->nama_mahasiswa,
                  'program_studi' => $request->program_studi,
-                 'tanggal_lahir' => \Carbon\Carbon::parseFromLocale($request->tanggal_lahir, config('app.locale'))->format("Y-m-d"),
+                //  'tanggal_lahir' => \Carbon\Carbon::parseFromLocale($request->tanggal_lahir, config('app.locale'))->format("Y-m-d"),
                  'alamat' => $request->alamat,
-                 'no_telepon' => $request->no_telepon]
+                //  'no_telepon' => $request->no_telepon
+                ]
             );
             $pemohon = $mahasiswa->nim;
     
@@ -184,7 +186,7 @@ class SuratController extends Controller
                     'jenis_surat' => $surat->jenis->jenis_surat,
                     'identitas' => $surat->izin_kunjungan->program_studi,
                     'pemohon' => $surat->izin_kunjungan->semester.'-'.$surat->izin_kunjungan->kelas,
-                    'waktu_readable' => $time->isoFormat('LLLL'),
+                    'waktu_readable' => $time->diffForHumans(),
                     'waktu' => $surat->updated_at
                 );
             } else {
@@ -428,5 +430,17 @@ class SuratController extends Controller
         Surat::destroy($id);
 
         return back();
+    }
+
+    function console_log($data)
+    {
+        $output = $data;
+        if (is_array($output)) {
+            echo "<script>console.log('Debug Objects: ".implode(',', $output)."')</script>";
+        } else {
+            echo "<script>console.log('Debug Objects: ".$output."')</script>";
+        }
+        
+        
     }
 }

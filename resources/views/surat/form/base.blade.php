@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('page-title', "Pengajuan Surat @yield('page-name')")
+@section('page-title')
+	Pengajuan Surat @yield('page-name')
+@endsection
 
 @section('content')
     <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">

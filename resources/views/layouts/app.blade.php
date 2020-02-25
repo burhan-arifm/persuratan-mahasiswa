@@ -33,8 +33,6 @@
 </head>
 <body>
     <div class="container align-tems-center">
-        @guest
-        @else
         <!--Navigation bar-->
         <nav class="navbar navbar-custom navbar-fixed-top">
             <div class="container-fluid">
@@ -45,11 +43,14 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="{{ url('/') }}"><span>{{ config('app.name', 'Laravel') }}</span></a>
+                    @guest
+                    <a class="navbar-brand" href="https://fdk.uinsgd.ac.id"><span>{{ config('app.name', 'Laravel') }}</span></a>
+                    @else
+                    <a class="navbar-brand" href="{{ route('beranda') }}"><span>{{ config('app.name', 'Laravel') }}</span></a>
+                    @endguest
                 </div>
             </div>
         </nav>
-        @endguest
 
         <!--Body Content-->
         @yield('content')
