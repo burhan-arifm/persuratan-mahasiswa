@@ -32,31 +32,30 @@
     
 </head>
 <body>
-    <div class="container align-tems-center">
-        <!--Navigation bar-->
-        <nav class="navbar navbar-custom navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @guest
-                    <a class="navbar-brand" href="https://fdk.uinsgd.ac.id"><span>{{ config('app.name', 'Laravel') }}</span></a>
-                    @else
-                    <a class="navbar-brand" href="{{ route('beranda') }}"><span>{{ config('app.name', 'Laravel') }}</span></a>
-                    @endguest
-                </div>
+    <!--Navigation bar-->
+    <nav class="navbar navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @guest
+                <a class="navbar-brand" href="https://fdk.uinsgd.ac.id"><span>{{ config('app.name', 'Laravel') }}</span></a>
+                @else
+                <a class="navbar-brand" href="{{ route('beranda') }}"><span>{{ config('app.name', 'Laravel') }}</span></a>
+                @endguest
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <!--Body Content-->
-        @yield('content')
-    </div>
+    <!--Body Content-->
+    @yield('content')
 
     <!--Javascript Dependencies-->
+    @routes
     <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>
@@ -66,6 +65,5 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/eonasdan-bootstrap-datetimepicker@4.17.47/build/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/howler@2.1.3/dist/howler.min.js"></script>
     <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
-    @routes
 </body>
 </html>

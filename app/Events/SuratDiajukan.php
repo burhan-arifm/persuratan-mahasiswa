@@ -38,10 +38,11 @@ class SuratDiajukan implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        $this->surat->jenisSurat;
+        $this->surat->jenis_surat;
         $this->surat->pemohon;
-        $this->surat->izinKunjungan;
-        $this->surat->jobTrainingPPM;
+        $this->surat->izin_kunjungan;
+        $this->surat->izin_riset;
+        $this->surat->izin_observasi;
 
         return [
             'surat' => $this->surat

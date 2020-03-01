@@ -9,9 +9,9 @@
             <div class="row">
                 <p>
                     Kepada Yth.<br>
-                    <b>Redaksi Harian Pikiran Rakyat</b><br>
-                    Jl. Asia Afrika No.77 <br>
-                    Bandung 40111
+                    <b>{{ $surat->izin_riset->lokasi_riset }}</b><br>
+                    {{ $surat->izin_riset->alamat_lokasi }}<br>
+                    {{ $surat->izin_riset->kota_lokasi }}
                 </p>
             </div>
             <!-- end of Penerima Surat -->
@@ -33,35 +33,35 @@
                         <tr>
                             <td>N a m a</td>
                             <td>:</td>
-                            <td>{{ $surat->diajukanOleh->nama }}</td>
+                            <td>{{ $surat->mahasiswa->nama }}</td>
                         </tr>
                         <tr>
                             <td>Nomor Pokok</td>
                             <td>:</td>
-                            <td>{{ $surat->diajukanOleh->nim }}</td>
+                            <td>{{ $surat->mahasiswa->nim }}</td>
                         </tr>
                         <tr>
                             <td>Program Studi</td>
                             <td>:</td>
-                            <td>{{ $surat->diajukanOleh->jurusan->program_studi }}</td>
+                            <td>{{ $surat->mahasiswa->jurusan->program_studi }}</td>
                         </tr>
                         <tr>
                             <td>Program/Semester</td>
                             <td>:</td>
-                            <td>S1/{{ $surat->diajukanOleh->semester }}</td>
+                            <td>S1/{{ $surat->mahasiswa->semester }}</td>
                         </tr>
                         <tr>
                             <td>Alamat</td>
                             <td>:</td>
-                            <td>{{ $surat->diajukanOleh->alamat }}</td>
+                            <td>{{ $surat->mahasiswa->alamat }}</td>
                         </tr>
                     </tbody>
                 </table>
                 <p class="text-justify mini-margin">
-                    untuk mengadakan Riset / Survey / Konsultasi pada Instansi / Lembaga yang Bapak / Ibu / Saudara pimpin dalam rangka penyusunan skripsi yang berjudul "{{ $surat->diajukanOleh->alamat }}". <br>
+                    untuk mengadakan Riset / Survey / Konsultasi pada Instansi / Lembaga yang Bapak / Ibu / Saudara pimpin dalam rangka penyusunan skripsi yang berjudul "{{ $surat->izin_riset->judul_skripsi }}". <br>
                     Dosen Pembimbing: <br>
-                    1. {{ $surat->diajukanOleh->alamat }}
-                    2. {{ $surat->diajukanOleh->alamat }}
+                    1. {{ $surat->izin_riset->pembimbing_1 }}<br>
+                    2. {{ $surat->izin_riset->pembimbing_2 }}<br>
                 </p>
                 <!-- end of Isi Surat -->
 

@@ -38,6 +38,12 @@ class SuratDisunting implements ShouldBroadcast
 
     public function broadcastWith()
     {
+        $this->surat->jenis_surat;
+        $this->surat->pemohon;
+        $this->surat->izin_kunjungan;
+        $this->surat->izin_riset;
+        $this->surat->izin_observasi;
+        
         return [
             'surat' => $this->surat
         ];

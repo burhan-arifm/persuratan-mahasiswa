@@ -7,32 +7,65 @@
 @section('content')
     <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 		<ul class="nav menu">
-			<li class="parent "><a data-toggle="collapse" href="#pen_surat">
-				<em class="fa fa-envelope">&nbsp;</em> Pengajuan Surat <span data-toggle="collapse" href="#pen_surat" class="icon pull-right"><em class="fa fa-arrow-circle-down"></em></span>
+			<li class="parent">
+				<a data-toggle="collapse" href="#pen_surat">
+					<em class="fas fa-envelope"></em>
+					&nbsp;Pengajuan Surat&nbsp;
+					<span data-toggle="collapse" href="#pen_surat" class="icon pull-right">
+						<em class="fas fa-plus"></em>
+					</span>
 				</a>
 				<ul class="children collapse" id="pen_surat">
-                    <!-- <li><a href="/pengajuan-surat/spmk"> -->
-                    <li><a href="{{ route('form_surat', ['kode_surat' => 'spmk']) }}">
-                    <span class="fa fa-envelope-open">&nbsp;</span>Masih Kuliah</a></li>
-                    <li><a href="/pengajuan-surat/izin-observasi">
-                    <span class="fa fa-envelope-open">&nbsp;</span>Izin Observasi</a></li>
-                    <li><a href="/pengajuan-surat/izin-riset">
-                    <span class="fa fa-envelope-open">&nbsp;</span>Izin Riset</a></li>
-                    <!-- <li><a href="/pengajuan-surat/izin-kunjungan"> -->
-                    <li><a href="{{ route('form_surat', ['kode_surat' => 'izin-kunjungan']) }}">
-                    <span class="fa fa-envelope-open">&nbsp;</span>Izin Kunjungan</a></li>
-                    <li><a href="/pengajuan-surat/praktik-mata-kuliah">
-                    <span class="fa fa-envelope-open">&nbsp;</span>Praktik Mata Kuliah</a></li>
-                    <li><a href="/pengajuan-surat/job-training">
-                    <span class="fa fa-envelope-open">&nbsp;</span>Job Training</a></li>
-                    <li><a href="/pengajuan-surat/ppm">
-                    <span class="fa fa-envelope-open">&nbsp;</span>PPM</a></li>
-                    <li><a href="/pengajuan-surat/surat-keterangan">
-                    <span class="fa fa-envelope-open">&nbsp;</span>Surat Keterangan</a></li>
-                    <li><a href="/pengajuan-surat/permohonan-munaqasah">
-                    <span class="fa fa-envelope-open">&nbsp;</span>Munaqasah</a></li>
-                    <li><a href="/pengajuan-surat/komprehensif">
-                    <span class="fa fa-envelope-open">&nbsp;</span>Komprehensif</a></li>
+                    <li>
+						<a href="{{ route('form_surat', ['kode_surat' => 'spmk']) }}">
+							<span class="fa fa-envelope-open">&nbsp;</span>Masih Kuliah
+						</a>
+					</li>
+                    <li>
+						<a href="{{ route('form_surat', ['kode_surat' => 'izin-observasi']) }}">
+							<span class="fa fa-envelope-open">&nbsp;</span>Izin Observasi
+						</a>
+					</li>
+                    <li>
+						<a href="{{ route('form_surat', ['kode_surat' => 'izin-riset']) }}">
+							<span class="fa fa-envelope-open">&nbsp;</span>Izin Riset
+						</a>
+					</li>
+                    <li>
+						<a href="{{ route('form_surat', ['kode_surat' => 'izin-kunjungan']) }}">
+							<span class="fa fa-envelope-open">&nbsp;</span>Izin Kunjungan
+						</a>
+					</li>
+                    <li>
+						<a href="{{ route('form_surat', ['kode_surat' => 'izin-praktik']) }}">
+							<span class="fa fa-envelope-open">&nbsp;</span>Praktik Mata Kuliah
+						</a>
+					</li>
+                    <li>
+						<a href="{{ route('form_surat', ['kode_surat' => 'job-training']) }}">
+							<span class="fa fa-envelope-open">&nbsp;</span>Job Training
+						</a>
+					</li>
+                    <li> 
+						<a href="{{ route('form_surat', ['kode_surat' => 'ppm']) }}">
+							<span class="fa fa-envelope-open">&nbsp;</span>PPM
+						</a>
+					</li>
+                    <li>
+						<a href="{{ route('form_surat', ['kode_surat' => 'surat-keterangan']) }}">
+							<span class="fa fa-envelope-open">&nbsp;</span>Surat Keterangan
+						</a>
+					</li>
+                    <li>
+						<a href="{{ route('form_surat', ['kode_surat' => 'permohonan-munaqasah']) }}">
+							<span class="fa fa-envelope-open">&nbsp;</span>Munaqasah
+						</a>
+					</li>
+                    <li>
+						<a href="{{ route('form_surat', ['kode_surat' => 'komprehensif']) }}">
+							<span class="fa fa-envelope-open">&nbsp;</span>Komprehensif
+						</a>
+					</li>
 				</ul>
 			</li>
 		</ul>
@@ -72,10 +105,10 @@
 											<!-- Form actions -->
 											<div class="form-group">
 												<div class="col-md-6 widget-right">
-													<button type="submit" class="btn btn-primary btn-md pull-right">Submit</button>
+													<button type="submit" class="btn btn-primary btn-md pull-right">Ajukan</button>
 												</div>
 												<div class="col-md-6 widget-right">
-													<button type="reset" class="btn btn-danger btn-md pull-left">Reset</button>
+													<button type="reset" class="btn btn-danger btn-md pull-left">Kosongkan</button>
 												</div>
 											</div>
 										</fieldset>

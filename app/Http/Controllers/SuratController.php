@@ -53,9 +53,10 @@ class SuratController extends Controller
                     $mahasiswa->pembimbing_studi = $request->pembimbing_studi;
                     $mahasiswa->save();
                     $detail = \App\IzinObservasi::create([
-                        'lokasi_observasi' => $request->lokasi_observasi,
-                        'alamat_lokasi' => $request->alamat_lokasi,
-                        'topik_skripsi' => $request->topik_skripsi
+                        'lokasi_observasi'  => $request->lokasi_observasi,
+                        'alamat_lokasi'     => $request->alamat_lokasi,
+                        'kota_lokasi'       => $request->kota_lokasi,
+                        'topik_skripsi'     => $request->topik_skripsi
                     ]);
                     break;
                 case 'izin-praktik':
@@ -68,11 +69,12 @@ class SuratController extends Controller
                     break;
                 case 'izin-riset':
                     $detail = \App\IzinRiset::create([
-                        'lokasi_riset' => $request->lokasi_riset,
+                        'lokasi_riset'  => $request->lokasi_riset,
                         'alamat_lokasi' => $request->alamat_lokasi,
+                        'kota_lokasi'   => $request->kota_lokasi,
                         'judul_skripsi' => $request->judul_skripsi,
-                        'pembimbing_1' => $request->pembimbing_1,
-                        'pembimbing_2' => $request->pembimbing_2
+                        'pembimbing_1'  => $request->pembimbing_1,
+                        'pembimbing_2'  => $request->pembimbing_2
                     ]);
                     break;
                 case 'job-training':
@@ -128,7 +130,7 @@ class SuratController extends Controller
             'pemohon' => $pemohon,
             'surat' => $detail->id,
             'status_surat' => "Belum Diproses",
-            'tanggal_terbit' => \Carbon\Carbon::now()->format('LL')
+            'tanggal_terbit' => \Carbon\Carbon::now()
         ]);
         event(new \App\Events\SuratDiajukan($surat));
 
@@ -196,7 +198,7 @@ class SuratController extends Controller
                     'jenis_surat' => $surat->jenis->jenis_surat,
                     'identitas' => $surat->mahasiswa->nim,
                     'pemohon' => $surat->mahasiswa->nama,
-                    'waktu_readable' => $time->isoFormat('LLLL'),
+                    'waktu_readable' => $time->diffForHumans(),
                     'waktu' => $surat->updated_at
                 );
             }
@@ -228,16 +230,16 @@ class SuratController extends Controller
         $surat->status_surat = "Telah Diproses";
         $surat->save();
         $surat->perihal = html_entity_decode($surat->jenis->perihal);
-        $time = \Carbon\Carbon::now();
+        $time = \Carbon\Carbon::createFromFormat('Y-m-d', $surat->tanggal_terbit);
         
         if ($surat->jenis_surat != 'izin-kunjungan') {
-            $batch = substr($surat->mahasiswa->nim, 1, 2);
+            $batch = substr($surat->pemohon, 1, 2);
             $enroll = \Carbon\Carbon::createFromFormat('j n y', "1 7 $batch", config('app.timezone'));
             $roman_semester = int_to_roman($enroll->diffInMonths($time) / 6 + 1);
             $formatter = new \NumberFormatter(config('app.locale'), \NumberFormatter::SPELLOUT);
-            $word_semester = $formatter->format(ceil($enroll->diffInMonths($time) / 6));
+            $word_semester = ucfirst($formatter->format(ceil($enroll->diffInMonths($time) / 6)));
             $semester = "$roman_semester ($word_semester)";
-            $surat->semester = $semester;
+            $surat->mahasiswa->semester = $semester;
         } else {
             $surat->program_studi = \App\ProgramStudi::where('kode_prodi', $surat->izin_kunjungan->program_studi)->first()->program_studi;
             $waktu_kunjungan = new \Carbon\Carbon($surat->izin_kunjungan->tanggal_kunjungan.' '.$surat->izin_kunjungan->waktu_kunjungan, config('app.timezone'));
@@ -247,7 +249,7 @@ class SuratController extends Controller
 
         $surat->nomor_surat = sprintf("B-%04u/Un.05/III.4/TL.10/%02u/%u", $surat->nomor_surat, $time->month, $time->year);
         $surat->tanggal_terbit = $time->isoFormat('LL');
-        event(new \App\Events\SuratDiproses($surat));
+        event(new SuratDiproses($surat));
 
         return view("surat.cetak.$surat->jenis_surat", ['surat' => $surat]);
     }
@@ -274,12 +276,13 @@ class SuratController extends Controller
             $pemohon = "$request->program_studi $request->semester-$request->kelas";
         } else {
             $mahasiswa = Mahasiswa::updateOrCreate(
-                ['nim' => $request->nim],
-                ['nama' => $request->nama_mahasiswa,
+                ['nim'           => $request->nim],
+                ['nama'          => $request->nama_mahasiswa,
                  'program_studi' => $request->program_studi,
-                 'tanggal_lahir' => \Carbon\Carbon::parseFromLocale($request->tanggal_lahir, config('app.locale'))->format("Y-m-d"),
-                 'alamat' => $request->alamat,
-                 'no_telepon' => $request->no_telepon]
+                //  'tanggal_lahir' => \Carbon\Carbon::parseFromLocale($request->tanggal_lahir, config('app.locale'))->format("Y-m-d"),
+                 'alamat'        => $request->alamat,
+                //  'no_telepon' => $request->no_telepon
+                 ]
             );
             $pemohon = $mahasiswa->nim;
     
@@ -302,12 +305,13 @@ class SuratController extends Controller
                     ]);
                     break;
                 case 'izin-riset':
-                    $detail = \App\IzinRiset::create([
-                        'lokasi_riset' => $request->lokasi_riset,
+                    $detail = \App\IzinRiset::whereId($surat->surat)->update([
+                        'lokasi_riset'  => $request->lokasi_riset,
                         'alamat_lokasi' => $request->alamat_lokasi,
+                        'kota_lokasi'   => $request->kota_lokasi,
                         'judul_skripsi' => $request->judul_skripsi,
-                        'pembimbing_1' => $request->pembimbing_1,
-                        'pembimbing_2' => $request->pembimbing_2
+                        'pembimbing_1'  => $request->pembimbing_1,
+                        'pembimbing_2'  => $request->pembimbing_2
                     ]);
                     break;
                 case 'job-training':
@@ -357,12 +361,12 @@ class SuratController extends Controller
         $nomor = explode("/", $request->nomor_surat);
         $nomor_surat = explode("-", $nomor[0]);
         $surat->update([
-            'nomor_surat' => intval($nomor_surat[1]),
-            'pemohon' => $pemohon,
-            'status_surat' => "Belum Diproses",
-            'tanggal_terbit' => $request->tanggal_terbit
+            'nomor_surat'    => intval($nomor_surat[1]),
+            'pemohon'        => $pemohon,
+            'status_surat'   => "Belum Diproses",
+            'tanggal_terbit' => \Carbon\Carbon::parseFromLocale($request->tanggal_terbit, config('app.locale'))->format("Y-m-d"),
         ]);
-        event(new \App\Events\SuratDisunting($surat));
+        event(new SuratDisunting($surat));
 
         // switch ($request->tipe_surat) {
         //     case 'job-training':
@@ -428,19 +432,8 @@ class SuratController extends Controller
         }
         
         Surat::destroy($id);
+        event(new SuratDihapus($surat));
 
         return back();
-    }
-
-    function console_log($data)
-    {
-        $output = $data;
-        if (is_array($output)) {
-            echo "<script>console.log('Debug Objects: ".implode(',', $output)."')</script>";
-        } else {
-            echo "<script>console.log('Debug Objects: ".$output."')</script>";
-        }
-        
-        
     }
 }

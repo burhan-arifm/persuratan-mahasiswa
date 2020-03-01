@@ -54,17 +54,23 @@ export default {
         listenForChanges() {
             Echo.channel('persuratan').listen('SuratDiajukan', (e) => {
                 this.letters.push(e.surat)
-                playSound()
+                if (this.type == "terbaru") {
+                    this.playSound()
+                }
             })
             Echo.channel('persuratan').listen('SuratDisunting', (e) => {
                 var surat = this.letters.find((surat) => surat.id === e.surat.id);
                 if (surat) {
                     this.letters.pop(e.surat)
                     this.letters.push(e.surat)
-                    playSound()
+                    if (this.type == "terbaru") {
+                        this.playSound()
+                    }
                 } else {
                     this.letters.push(e.surat)
-                    playSound()
+                    if (this.type == "terbaru") {
+                        this.playSound()
+                    }
                 }
             })
             Echo.channel('persuratan').listen('SuratDiproses', (e) => {
@@ -116,7 +122,7 @@ export default {
     },
     computed: {
         sortedLetters: function() {
-            return this.letters.sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
+            return this.letters.sort((a,b) => new Date(b.waktu) - new Date(a.waktu))
         }
     }
 }
