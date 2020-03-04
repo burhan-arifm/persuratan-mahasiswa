@@ -104,12 +104,12 @@ class SuratController extends Controller
                     ]);
                     break;
                 case 'ppm':
-                    $detail = \App\PPM::updateOrCreate(
-                        ['instansi_penerima' => $request->instansi_penerima,
-                         'alamat_instansi' => $request->alamat_instansi],
-                        ['dosen_pembimbing' => $request->dosen_pembimbing]
-    
-                    );
+                    $detail = \App\PPM::create([
+                        'instansi_penerima' => $request->instansi_penerima,
+                        'alamat_instansi'   => $request->alamat_instansi,
+                        'kota_lokasi'       => $request->kota_lokasi,
+                        'dosen_pembimbing'  => $request->dosen_pembimbing
+                    ]);
                     break;
                 case 'surat-keterangan':
                     $detail = \App\Keterangan::create([
@@ -345,12 +345,12 @@ class SuratController extends Controller
                     ]);
                     break;
                 case 'ppm':
-                    \App\PPM::updateOrCreate(
-                        ['instansi_penerima' => $request->instansi_penerima,
-                         'alamat_instansi' => $request->alamat_instansi],
-                        ['dosen_pembimbing' => $request->dosen_pembimbing]
-    
-                    );
+                    \App\PPM::whereId($surat->surat)->update([
+                        'instansi_penerima' => $request->instansi_penerima,
+                        'alamat_instansi' => $request->alamat_instansi,
+                        'kota_lokasi'       => $request->kota_lokasi,
+                        'dosen_pembimbing' => $request->dosen_pembimbing
+                    ]);
                     break;
                 case 'surat-keterangan':
                     \App\Keterangan::create([
@@ -374,39 +374,6 @@ class SuratController extends Controller
             'tanggal_terbit' => \Carbon\Carbon::parseFromLocale($request->tanggal_terbit, config('app.locale'))->format("Y-m-d"),
         ]);
         event(new \App\Events\SuratDisunting($surat));
-
-        // switch ($request->tipe_surat) {
-        //     case 'job-training':
-        //     case 'ppm':
-        //         \App\JobTrainingPPM::whereId($surat->surat)->update([
-        //             'instansi_penerima' => $request->instansi_penerima,
-        //             'alamat_instansi' => $request->alamat_instansi,
-        //             'dosen_pembimbing' => $request->dosen_pembimbing
-        //         ]);
-        //         break;
-        //     case 'izin-observasi':
-        //         \App\IzinObservasi::whereId($surat->surat)->update([
-        //             'dosen_pembimbing' => $request->dosen_pembimbing,
-        //             'topik_penelitian' => $request->topik_penelitian
-        //         ]);
-        //         break;
-        //     case 'izin-praktik':
-        //         \App\IzinPraktik::whereId($surat->surat)->update([
-        //             'mata_kuliah' => $request->mata_kuliah,
-        //             'dosen_pengampu' => $request->dosen_pengampu
-        //         ]);
-        //         break;
-        //     case 'izin-riset':
-        //         \App\IzinRiset::whereId($surat->surat)->update([
-        //             'topik_penelitian' => $request->topik_penelitian,
-        //             'pembimbing_1' => $request->pembimbing_1,
-        //             'pembimbing_2' => $request->pembimbing_2
-        //         ]);
-        //         break;
-            
-        //     default:
-        //         break;
-        // }
 
         return redirect()->route('beranda');
     }
