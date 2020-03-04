@@ -79,11 +79,13 @@ class SuratController extends Controller
                     ]);
                     break;
                 case 'job-training':
-                    $detail = \App\JobTraining::updateOrCreate(
-                        ['instansi_penerima' => $request->instansi_penerima,
-                         'alamat_instansi' => $request->alamat_instansi],
-                        ['dosen_pembimbing' => $request->dosen_pembimbing]
-                    );
+                    $detail = \App\JobTraining::create([
+                        'instansi_penerima' => $request->instansi_penerima,
+                        'alamat_instansi'   => $request->alamat_instansi,
+                        'kota_lokasi'       => $request->kota_lokasi,
+                        'dosen_pembimbing'  => $request->dosen_pembimbing
+                    ]);
+                    break;
                 case 'permohonan-munaqasah':
                     $detail = \App\PermohonanMunaqasah::create([
                         'judul_skripsi' => $request->judul_skripsi,
@@ -249,7 +251,7 @@ class SuratController extends Controller
         }
 
         $surat->nomor_surat = sprintf("B-%04u/Un.05/III.4/TL.10/%02u/%u", $surat->nomor_surat, $time->month, $time->year);
-        $surat->tanggal_terbit = $time->isoFormat('LL');
+        $surat->tanggal_terbit = $time->isoFormat('DD MMMM Y');
         event(new \App\Events\SuratDiproses($surat));
 
         return view("surat.cetak.$surat->jenis_surat", ['surat' => $surat]);
@@ -318,11 +320,13 @@ class SuratController extends Controller
                     ]);
                     break;
                 case 'job-training':
-                    \App\JobTraining::updateOrCreate(
-                        ['instansi_penerima' => $request->instansi_penerima,
-                         'alamat_instansi' => $request->alamat_instansi],
-                        ['dosen_pembimbing' => $request->dosen_pembimbing]
-                    );
+                    \App\JobTraining::whereId($surat->surat)->update([
+                        'instansi_penerima' => $request->instansi_penerima,
+                        'alamat_instansi' => $request->alamat_instansi,
+                        'kota_lokasi'       => $request->kota_lokasi,
+                        'dosen_pembimbing' => $request->dosen_pembimbing
+                    ]);
+                    break;
                 case 'permohonan-munaqasah':
                     \App\PermohonanMunaqasah::create([
                         'judul_skripsi' => $request->judul_skripsi,
