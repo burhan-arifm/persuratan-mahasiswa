@@ -40,7 +40,7 @@ class Surat extends Model
 
     public function job_training()
     {
-        return $this->belongsTo('App\JobTrainingPPM', 'surat');
+        return $this->belongsTo('App\JobTraining', 'surat');
     }
 
     public function surat_keterangan()
@@ -65,6 +65,6 @@ class Surat extends Model
 
     public function ppm()
     {
-        return $this->belongsTo('App\JobTrainingPPM', 'surat');
+        return $this->belongsTo('App\PPM', 'surat');
     }
 }
