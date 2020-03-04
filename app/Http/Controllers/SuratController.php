@@ -62,9 +62,10 @@ class SuratController extends Controller
                 case 'izin-praktik':
                     $detail = \App\IzinPraktik::create([
                         'instansi_penerima' => $request->instansi_penerima,
-                        'alamat_instansi' => $request->alamat_instansi,
-                        'mata_kuliah' => $request->mata_kuliah,
-                        'dosen_pengampu' => $request->dosen_pengampu    
+                        'alamat_instansi'   => $request->alamat_instansi,
+                        'kota_lokasi'       => $request->kota_lokasi,
+                        'mata_kuliah'       => $request->mata_kuliah,
+                        'dosen_pengampu'    => $request->dosen_pengampu    
                     ]);
                     break;
                 case 'izin-riset':
@@ -290,7 +291,7 @@ class SuratController extends Controller
                 case 'izin-observasi':
                     $mahasiswa->pembimbing_studi = $request->pembimbing_studi;
                     $mahasiswa->save();
-                    $detail = \App\IzinObservasi::whereId($surat->surat)->update([
+                    \App\IzinObservasi::whereId($surat->surat)->update([
                         'lokasi_observasi'  => $request->lokasi_observasi,
                         'alamat_lokasi'     => $request->alamat_lokasi,
                         'kota_lokasi'       => $request->kota_lokasi,
@@ -298,15 +299,16 @@ class SuratController extends Controller
                     ]);
                     break;
                 case 'izin-praktik':
-                    $detail = \App\IzinPraktik::create([
+                    \App\IzinPraktik::whereId($surat->surat)->update([
                         'instansi_penerima' => $request->instansi_penerima,
                         'alamat_instansi' => $request->alamat_instansi,
+                        'kota_lokasi'       => $request->kota_lokasi,
                         'mata_kuliah' => $request->mata_kuliah,
                         'dosen_pengampu' => $request->dosen_pengampu    
                     ]);
                     break;
                 case 'izin-riset':
-                    $detail = \App\IzinRiset::whereId($surat->surat)->update([
+                    \App\IzinRiset::whereId($surat->surat)->update([
                         'lokasi_riset'  => $request->lokasi_riset,
                         'alamat_lokasi' => $request->alamat_lokasi,
                         'kota_lokasi'   => $request->kota_lokasi,
@@ -316,13 +318,13 @@ class SuratController extends Controller
                     ]);
                     break;
                 case 'job-training':
-                    $detail = \App\JobTraining::updateOrCreate(
+                    \App\JobTraining::updateOrCreate(
                         ['instansi_penerima' => $request->instansi_penerima,
                          'alamat_instansi' => $request->alamat_instansi],
                         ['dosen_pembimbing' => $request->dosen_pembimbing]
                     );
                 case 'permohonan-munaqasah':
-                    $detail = \App\PermohonanMunaqasah::create([
+                    \App\PermohonanMunaqasah::create([
                         'judul_skripsi' => $request->judul_skripsi,
                         'pembimbing_1' => $request->pembimbing_1,
                         'pembimbing_2' => $request->pembimbing_2
@@ -330,7 +332,7 @@ class SuratController extends Controller
                     break;
                 case 'pernyataan-masih-kuliah':
                     $pangol = explode(" - ", $request->pangkat_golongan);
-                    $detail = \App\MasihKuliah::create([
+                    \App\MasihKuliah::create([
                         'nama_orang_tua' => $request->nama_orang_tua,
                         'nip_orang_tua' => $request->nip_orang_tua,
                         'pangkat' => $pangol[0],
@@ -339,7 +341,7 @@ class SuratController extends Controller
                     ]);
                     break;
                 case 'ppm':
-                    $detail = \App\PPM::updateOrCreate(
+                    \App\PPM::updateOrCreate(
                         ['instansi_penerima' => $request->instansi_penerima,
                          'alamat_instansi' => $request->alamat_instansi],
                         ['dosen_pembimbing' => $request->dosen_pembimbing]
@@ -347,7 +349,7 @@ class SuratController extends Controller
                     );
                     break;
                 case 'surat-keterangan':
-                    $detail = \App\Keterangan::create([
+                    \App\Keterangan::create([
                         'keperluan' => $request->keperluan
                     ]);
                     break;
