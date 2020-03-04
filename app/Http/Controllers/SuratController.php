@@ -249,7 +249,7 @@ class SuratController extends Controller
 
         $surat->nomor_surat = sprintf("B-%04u/Un.05/III.4/TL.10/%02u/%u", $surat->nomor_surat, $time->month, $time->year);
         $surat->tanggal_terbit = $time->isoFormat('LL');
-        event(new SuratDiproses($surat));
+        event(new \App\Events\SuratDiproses($surat));
 
         return view("surat.cetak.$surat->jenis_surat", ['surat' => $surat]);
     }
@@ -290,10 +290,11 @@ class SuratController extends Controller
                 case 'izin-observasi':
                     $mahasiswa->pembimbing_studi = $request->pembimbing_studi;
                     $mahasiswa->save();
-                    $detail = \App\IzinObservasi::create([
-                        'lokasi_observasi' => $request->lokasi_observasi,
-                        'alamat_lokasi' => $request->alamat_lokasi,
-                        'topik_skripsi' => $request->topik_skripsi
+                    $detail = \App\IzinObservasi::whereId($surat->surat)->update([
+                        'lokasi_observasi'  => $request->lokasi_observasi,
+                        'alamat_lokasi'     => $request->alamat_lokasi,
+                        'kota_lokasi'       => $request->kota_lokasi,
+                        'topik_skripsi'     => $request->topik_skripsi
                     ]);
                     break;
                 case 'izin-praktik':
@@ -360,13 +361,13 @@ class SuratController extends Controller
 
         $nomor = explode("/", $request->nomor_surat);
         $nomor_surat = explode("-", $nomor[0]);
-        $surat->update([
+        $surat->whereId($id)->update([
             'nomor_surat'    => intval($nomor_surat[1]),
             'pemohon'        => $pemohon,
             'status_surat'   => "Belum Diproses",
             'tanggal_terbit' => \Carbon\Carbon::parseFromLocale($request->tanggal_terbit, config('app.locale'))->format("Y-m-d"),
         ]);
-        event(new SuratDisunting($surat));
+        event(new \App\Events\SuratDisunting($surat));
 
         // switch ($request->tipe_surat) {
         //     case 'job-training':
@@ -432,7 +433,7 @@ class SuratController extends Controller
         }
         
         Surat::destroy($id);
-        event(new SuratDihapus($surat));
+        event(new \App\Events\SuratDihapus($surat));
 
         return back();
     }
