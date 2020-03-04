@@ -52,17 +52,34 @@ export default {
             })
         },
         listenForChanges() {
-            Echo.channel('surat-baru').listen('SuratDiajukan', (e) => {
+            Echo.channel('persuratan').listen('SuratDiajukan', (e) => {
                 this.letters.push(e.surat)
-                playSound()
+                if (this.type == "terbaru") {
+                    this.playSound()
+                }
             })
-            Echo.channel('surat-baru').listen('SuratDiproses', (e) => {
+            Echo.channel('persuratan').listen('SuratDisunting', (e) => {
+                var surat = this.letters.find((surat) => surat.id === e.surat.id);
+                if (surat) {
+                    this.letters.pop(e.surat)
+                    this.letters.push(e.surat)
+                    if (this.type == "terbaru") {
+                        this.playSound()
+                    }
+                } else {
+                    this.letters.push(e.surat)
+                    if (this.type == "terbaru") {
+                        this.playSound()
+                    }
+                }
+            })
+            Echo.channel('persuratan').listen('SuratDiproses', (e) => {
                 var surat = this.letters.find((surat) => surat.id === e.surat.id);
                 if (surat) {
                     this.letters.pop(e.surat)
                 }
             })
-            Echo.channel('surat-baru').listen('SuratDihapus', (e) => {
+            Echo.channel('persuratan').listen('SuratDihapus', (e) => {
                 var surat = this.letters.find((surat) => surat.id === e.surat.id);
                 if (surat) {
                     this.letters.pop(e.surat)
@@ -105,7 +122,7 @@ export default {
     },
     computed: {
         sortedLetters: function() {
-            return this.letters.sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
+            return this.letters.sort((a,b) => new Date(b.waktu) - new Date(a.waktu))
         }
     }
 }

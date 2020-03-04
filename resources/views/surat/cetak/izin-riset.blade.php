@@ -9,9 +9,9 @@
             <div class="row">
                 <p>
                     Kepada Yth.<br>
-                    <b>{{ $surat->izin_kunjungan->instansi_penerima }}</b><br>
-                    {{ $surat->izin_kunjungan->alamat_instansi }}<br>
-                    {{ $surat->izin_kunjungan->kota_instansi }}
+                    <b>{{ $surat->izin_riset->lokasi_riset }}</b><br>
+                    {{ $surat->izin_riset->alamat_lokasi }}<br>
+                    {{ $surat->izin_riset->kota_lokasi }}
                 </p>
             </div>
             <!-- end of Penerima Surat -->
@@ -23,7 +23,7 @@
                     <b><em>Assalamu'alaikum Wr. Wb.</em></b>
                 </p>
                 <p class="text-justify first-line-indent">
-                    Dekan Fakultas Dakwah dan Komunikasi Universitas Islam Negeri (UIN) Sunan Gunung Djati Bandung, dengan ini memohon kesediaan Bapak/ Ibu/ Saudara untuk memberikan izin kepada mahasiswa kami dalam rangka kunjungan:
+                    Dekan Fakultas Dakwah dan Komunikasi Universitas Islam Negeri (UIN) Sunan Gunung Djati Bandung, dengan ini mohon kesediaan Bapak/ Ibu/ Saudara untuk memberikan izin kepada mahasiswa kami sebagai berikut:
                 </p>
                 <!-- end of Pembuka Surat -->
 
@@ -31,37 +31,38 @@
                 <table class="table table-sm table-borderless" style="margin-left: 2.2em;">
                     <tbody>
                         <tr>
-                            <td>Mata Kuliah</td>
+                            <td>N a m a</td>
                             <td>:</td>
-                            <td>{{ $surat->izin_kunjungan->mata_kuliah }}</td>
+                            <td>{{ $surat->mahasiswa->nama }}</td>
+                        </tr>
+                        <tr>
+                            <td>Nomor Pokok</td>
+                            <td>:</td>
+                            <td>{{ $surat->mahasiswa->nim }}</td>
                         </tr>
                         <tr>
                             <td>Program Studi</td>
                             <td>:</td>
-                            <td>{{ $surat->program_studi }}</td>
+                            <td>{{ $surat->mahasiswa->jurusan->program_studi }}</td>
                         </tr>
                         <tr>
-                            <td>Semester/Kelas</td>
+                            <td>Program/Semester</td>
                             <td>:</td>
-                            <td>{{ $surat->izin_kunjungan->semester }}/{{ $surat->izin_kunjungan->kelas }}</td>
+                            <td>S1/{{ $surat->mahasiswa->semester }}</td>
                         </tr>
                         <tr>
-                            <td>Dosen Pengampu</td>
+                            <td>Alamat</td>
                             <td>:</td>
-                            <td>{{ $surat->izin_kunjungan->dosen_pengampu }}</td>
-                        </tr>
-                        <tr>
-                            <td>Hari / Tanggal</td>
-                            <td>:</td>
-                            <td>{{ $surat->tanggal_kunjungan }}</td>
-                        </tr>
-                        <tr>
-                            <td>Jam</td>
-                            <td>:</td>
-                            <td>{{ $surat->waktu_kunjungan }}</td>
+                            <td>{{ $surat->mahasiswa->alamat }}</td>
                         </tr>
                     </tbody>
                 </table>
+                <p class="text-justify mini-margin">
+                    untuk mengadakan Riset / Survey / Konsultasi pada Instansi / Lembaga yang Bapak / Ibu / Saudara pimpin dalam rangka penyusunan skripsi yang berjudul "{{ $surat->izin_riset->judul_skripsi }}". <br>
+                    Dosen Pembimbing: <br>
+                    1. {{ $surat->izin_riset->pembimbing_1 }}<br>
+                    2. {{ $surat->izin_riset->pembimbing_2 }}<br>
+                </p>
                 <!-- end of Isi Surat -->
 
                 <!-- Penutup Surat -->

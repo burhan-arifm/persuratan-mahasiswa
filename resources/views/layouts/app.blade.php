@@ -32,31 +32,30 @@
     
 </head>
 <body>
-    <div>
-        @guest
-        @else
-        <!--Navigation bar-->
-        <nav class="navbar navbar-custom navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="{{ url('/') }}"><span>{{ config('app.name', 'Laravel') }}</span></a>
-                </div>
+    <!--Navigation bar-->
+    <nav class="navbar navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @guest
+                <a class="navbar-brand" href="https://fdk.uinsgd.ac.id"><span>{{ config('app.name', 'Laravel') }}</span></a>
+                @else
+                <a class="navbar-brand" href="{{ route('beranda') }}"><span>{{ config('app.name', 'Laravel') }}</span></a>
+                @endguest
             </div>
-        </nav>
-        @endguest
+        </div>
+    </nav>
 
-        <!--Body Content-->
-        @routes
-        @yield('content')
-    </div>
+    <!--Body Content-->
+    @yield('content')
 
     <!--Javascript Dependencies-->
+    @routes
     <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>

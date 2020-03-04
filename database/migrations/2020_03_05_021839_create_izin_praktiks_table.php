@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIzinKunjungansTable extends Migration
+class CreateIzinPraktiksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,13 @@ class CreateIzinKunjungansTable extends Migration
      */
     public function up()
     {
-        Schema::create('izin_kunjungans', function (Blueprint $table) {
+        Schema::create('izin_praktiks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('instansi_penerima');
             $table->text('alamat_instansi');
-            $table->string('kota_instansi');
+            $table->string('kota_lokasi');
             $table->string('mata_kuliah');
-            $table->char('program_studi', 3);
-            $table->string('semester', 4);
-            $table->char('kelas', 1);
             $table->string('dosen_pengampu');
-            $table->date('tanggal_kunjungan');
-            $table->time('waktu_kunjungan');
             $table->timestamps();
         });
     }
@@ -36,6 +31,6 @@ class CreateIzinKunjungansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('izin_kunjungans');
+        Schema::dropIfExists('izin_praktiks');
     }
 }
