@@ -145,68 +145,20 @@ class SuratController extends Controller
         $persuratan = Surat::all();
         $letters = [];
 
-        foreach ($persuratan as $surat) {
-            $time = \Carbon\Carbon::createFromTimeString(is_null($surat->tanggal_terbit) ? $surat->tanggal_terbit : $surat->updated_at);
-            $nomor_surat = sprintf("B-%04u/Un.05/III.4/TL.10/%02u/%u", $surat->nomor_surat, $time->month, $time->year);
-            if ($surat->jenis_surat == 'izin-kunjungan') {
-                $surat_simplified = array(
-                    'id' => $surat->id,
-                    'nomor_surat' => $nomor_surat,
-                    'jenis_surat' => $surat->jenis->jenis_surat,
-                    'identitas' => $surat->izin_kunjungan->program_studi,
-                    'pemohon' => $surat->izin_kunjungan->semester.'-'.$surat->izin_kunjungan->kelas,
-                    'waktu_readable' => $time->isoFormat('LLLL'),
-                    'waktu' => $surat->updated_at
-                );
-            } else {
-                $surat_simplified = array(
-                    'id' => $surat->id,
-                    'nomor_surat' => $nomor_surat,
-                    'jenis_surat' => $surat->jenis->jenis_surat,
-                    'identitas' => $surat->mahasiswa->nim,
-                    'pemohon' => $surat->mahasiswa->nama,
-                    'waktu_readable' => $time->isoFormat('LLLL'),
-                    'waktu' => $surat->updated_at
-                );
-            }
-            
-            $letters[] = $surat_simplified;
+        foreach ($persuratan as $surat) {            
+            $letters[] = \Format::surat_table($surat, 'semua');
         }
 
         return $letters;
     }
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
     public function terbaru()
     {
         $persuratan =  Surat::where('status_surat', "Belum Diproses")->get();
         $letters = [];
 
         foreach ($persuratan as $surat) {
-            $time = \Carbon\Carbon::createFromTimeString($surat->updated_at);
-            $nomor_surat = sprintf("B-%04u/Un.05/III.4/TL.10/%02u/%u", $surat->nomor_surat, $time->month, $time->year);
-            if ($surat->jenis_surat == 'izin-kunjungan') {
-                $surat_simplified = array(
-                    'id' => $surat->id,
-                    'nomor_surat' => $nomor_surat,
-                    'jenis_surat' => $surat->jenis->jenis_surat,
-                    'identitas' => $surat->izin_kunjungan->program_studi,
-                    'pemohon' => $surat->izin_kunjungan->semester.'-'.$surat->izin_kunjungan->kelas,
-                    'waktu_readable' => $time->diffForHumans(),
-                    'waktu' => $surat->updated_at
-                );
-            } else {
-                $surat_simplified = array(
-                    'id' => $surat->id,
-                    'nomor_surat' => $nomor_surat,
-                    'jenis_surat' => $surat->jenis->jenis_surat,
-                    'identitas' => $surat->mahasiswa->nim,
-                    'pemohon' => $surat->mahasiswa->nama,
-                    'waktu_readable' => $time->diffForHumans(),
-                    'waktu' => $surat->updated_at
-                );
-            }
-            
-            $letters[] = $surat_simplified;
+            $letters[] = \Format::surat_table($surat, 'terbaru');
         }
 
         return $letters;
@@ -386,27 +338,40 @@ class SuratController extends Controller
             case 'izin-kunjungan':
                 \App\IzinKunjungan::destroy($surat->surat);
                 break;
+            case 'izin-observasi':
+                \App\IzinObservasi::destroy($surat->surat);
+                break;
+            case 'izin-praktik':
+                \App\IzinPraktik::destroy($surat->surat);
+                break;
+            case 'izin-riset':
+                \App\IzinRiset::destroy($surat->surat);
+                break;
+            case 'job-training':
+                \App\JobTraining::destroy($surat->surat);
+                break;
+            case 'permohonan-komprehensif':
+                \App\Komprehensif::destroy($surat->surat);
+                break;
             case 'permohonan-munaqasah':
-                \App\PermohonanMunaqasah::destroy($surat->surat);
+                \App\Munaqasah::destroy($surat->surat);
                 break;
             case 'pernyataan-masih-kuliah':
                 \App\MasihKuliah::destroy($surat->surat);
                 break;
+            case 'ppm':
+                \App\PPM::destroy($surat->surat);
+                break;
             case 'surat-keterangan':
                 \App\Keterangan::destroy($surat->surat);
                 break;
-            case 'izin-observasi':
-            case 'izin-praktik':
-            case 'izin-riset':
-            case 'job-training':
-            case 'ppm':
-            case 'permohonan-komprehensif':
             
             default:
         }
+
+        event(new \App\Events\SuratDihapus($surat));
         
         Surat::destroy($id);
-        event(new \App\Events\SuratDihapus($surat));
 
         return back();
     }

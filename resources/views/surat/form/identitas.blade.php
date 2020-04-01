@@ -29,29 +29,11 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-md-3 control-label" for="tanggal_lahir">Tanggal Lahir</label>
-		<div class="col-md-6">
-			<div class="input-group date date-new" data-provide="datepicker">
-				<div class="input-group-addon">
-					<span class="fas fa-th"></span>
-				</div>
-				<input id="tanggal_lahir" type="text" class="form-control" name="tanggal_lahir">
-			</div>
-		</div>
-	</div>
-
-	<div class="form-group">
 		<label class="col-md-3 control-label" for="alamat">Alamat</label>
 		<div class="col-md-6">
 			<textarea class="form-control" id="alamat" name="alamat" placeholder="Masukkan alamat Anda tinggal sekarang" rows="5"></textarea>
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-md-3 control-label" for="no_telepon">Telepon</label>
-		<div class="col-md-6">
-			<input id="no_telepon" name="no_telepon" type="text" placeholder="Masukkan nomor telepon yang dapat dihubungi" class="form-control">
-		</div>
-	</div>
 	@yield('detail-form')
 @endsection

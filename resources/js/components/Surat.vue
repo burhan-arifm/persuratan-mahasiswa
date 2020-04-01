@@ -38,17 +38,26 @@ export default {
     data() {
         return {
             letters: [],
-            csrf_token: document.head.querySelector('meta[name="csrf-token"]').content
+            csrf_token: document.head.querySelector('meta[name="csrf-token"]').content,
+            timer: '',
+            first_loaded: false
         }
     },
     created() {
-        this.fetchSurat();
-        this.listenForChanges();
+        this.fetchSurat()
+        this.listenForChanges()
+        if (this.type == 'terbaru') {
+            this.timer = setInterval(this.fetchSurat, 60000)
+        }
     },
     methods: {
         fetchSurat() {
             axios.get(this.route('data_surat.'+this.type)).then((response) => {
                 this.letters = response.data
+                if (this.type == "terbaru" && this.letters.length > 0 && !this.first_loaded) {
+                    this.playSound()
+                    this.first_loaded = !this.first_loaded
+                }
             })
         },
         listenForChanges() {
@@ -61,7 +70,7 @@ export default {
             Echo.channel('persuratan').listen('SuratDisunting', (e) => {
                 var surat = this.letters.find((surat) => surat.id === e.surat.id);
                 if (surat) {
-                    this.letters.pop(e.surat)
+                    this.letters.pop(surat)
                     this.letters.push(e.surat)
                     if (this.type == "terbaru") {
                         this.playSound()
@@ -76,20 +85,20 @@ export default {
             Echo.channel('persuratan').listen('SuratDiproses', (e) => {
                 var surat = this.letters.find((surat) => surat.id === e.surat.id);
                 if (surat) {
-                    this.letters.pop(e.surat)
+                    this.letters.pop(surat)
                 }
             })
             Echo.channel('persuratan').listen('SuratDihapus', (e) => {
                 var surat = this.letters.find((surat) => surat.id === e.surat.id);
                 if (surat) {
-                    this.letters.pop(e.surat)
+                    this.letters.pop(surat)
                 }
             })
         },
         playSound() {
             var sound = new Howl({
                 src: 'storage/bell.mp3',
-                volume: 1
+                volume: 10
             })
             sound.play()
         },
@@ -107,14 +116,19 @@ export default {
                     $.ajax({
                         url: this.route('surat.hapus', {id: id_surat}),
                         type: 'POST',
-                        data: {_method: 'delete', _token: token},
-                        success: function () {
-                            Swal.fire({
-                                title: 'Terhapus',
-                                text: 'Surat yang Anda pilih berhasil dihapus.',
-                                type: 'success'
-                            })
-                        }
+                        data: {_method: 'delete', _token: token}
+                    }).done(function () {
+                        Swal.fire({
+                            title: 'Terhapus',
+                            text: 'Surat yang Anda pilih berhasil dihapus.',
+                            type: 'success'
+                        })
+                    }).fail(function () {
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Surat yang Anda pilih gagal dihapus.',
+                            type: 'error'
+                        })
                     })
                 }
             })
@@ -124,6 +138,9 @@ export default {
         sortedLetters: function() {
             return this.letters.sort((a,b) => new Date(b.waktu) - new Date(a.waktu))
         }
+    },
+    beforeDestroy() {
+        clearInterval(this.timer)
     }
 }
 </script>
